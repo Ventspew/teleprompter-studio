@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+:root {
+  --background: #090b0d;
+  --foreground: #f4f7f8;
+  --accent: #2dd4bf;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-prompter: "Source Serif 4", "Times New Roman", serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  overflow: hidden;
+  user-select: none;
+}
+
+textarea,
+[contenteditable="true"],
+input,
+select {
+  user-select: text;
+}
+
+.studio-btn-primary,
+.studio-btn-ghost,
+.studio-btn-danger,
+.studio-btn-record {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+  cursor: pointer;
+}
+
+.studio-btn-primary {
+  background: color-mix(in oklab, var(--accent) 22%, transparent);
+  color: #99f6e4;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+.studio-btn-primary:hover {
+  background: color-mix(in oklab, var(--accent) 32%, transparent);
+}
+
+.studio-btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: #e4e4e7;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.studio-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.studio-btn-danger {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.studio-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.28);
+}
+
+.studio-btn-record {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: 1px solid rgba(239, 68, 68, 1);
+}
+
+.studio-btn-record:hover {
+  background: rgb(220, 38, 38);
+}
+
+.studio-btn-primary:disabled,
+.studio-btn-ghost:disabled,
+.studio-btn-danger:disabled,
+.studio-btn-record:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.studio-select,
+.studio-textarea {
+  width: 100%;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
+  color: #f4f4f5;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.875rem;
+  outline: none;
+  font-family: inherit;
+}
+
+.studio-select:focus,
+.studio-textarea:focus {
+  border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+.studio-textarea {
+  resize: vertical;
+  line-height: 1.5;
+  font-family: var(--font-prompter);
+}
+
+.studio-range {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
