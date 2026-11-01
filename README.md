@@ -30,27 +30,19 @@ npm run dev
 
 Dit opent Teleprompter Studio als desktopvenster.
 
-## App bouwen (.app)
+## Installeren (release)
+
+Download de nieuwste **DMG** van de [Releases](https://github.com/Ventspew/teleprompter-studio/releases)-pagina, open het bestand en sleep **Teleprompter Studio** naar Programma’s.
+
+> De app is unsigned. Bij de eerste start: rechtsklik → **Open** als Gatekeeper een melding toont.
+
+## Zelf bouwen
 
 ```bash
 npm run build
 ```
 
-Daarna:
-
-```bash
-open "release/mac-arm64/Teleprompter Studio.app"
-```
-
-Op Intel-Macs kan het pad `release/mac/` zijn. Sleep de `.app` desgewenst naar Programma’s.
-
-> De build is lokaal unsigned. Bij de eerste start: rechtsklik → **Open** als Gatekeeper een melding toont.
-
-Optioneel DMG:
-
-```bash
-npm run build:dmg
-```
+Dit maakt een DMG + ZIP in `release/`.
 
 ## Gebruik
 

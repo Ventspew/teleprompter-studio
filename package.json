@@ -13,8 +13,8 @@
   "scripts": {
     "dev": "concurrently -k \"vite\" \"wait-on http://127.0.0.1:5173 && electron .\"",
     "build:web": "vite build",
-    "build": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dir",
-    "build:dmg": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg",
+    "build": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac",
+    "build:dmg": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg zip",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "start": "electron ."
@@ -54,17 +54,40 @@
     "mac": {
       "category": "public.app-category.video",
       "target": [
-        "dir"
+        {
+          "target": "dmg",
+          "arch": ["arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["arm64"]
+        }
       ],
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
       "extendInfo": {
-        "NSCameraUsageDescription": "Teleprompter Studio heeft toegang tot je camera nodig om vlogs op te nemen.",
+        "NSCameraUsageDescription": "Teleprompter Studio heeft toegang tot je camera nodig om video op te nemen.",
         "NSMicrophoneUsageDescription": "Teleprompter Studio heeft toegang tot je microfoon nodig om audio op te nemen.",
         "NSLocalNetworkUsageDescription": "Alleen voor lokale studio-functionaliteit."
       },
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "dmg": {
+      "title": "Teleprompter Studio",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     }
   }
 }
