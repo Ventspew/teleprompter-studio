@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/macdirtycow/teleprompter-studio.git"
+    "url": "https://github.com/Ventspew/teleprompter-studio.git"
   },
   "main": "electron/main.cjs",
   "scripts": {

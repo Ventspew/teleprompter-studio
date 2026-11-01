@@ -22,7 +22,7 @@ Alles blijft op jouw computer: geen accounts, geen cloud, geen tracking.
 ## Snel starten
 
 ```bash
-git clone https://github.com/macdirtycow/teleprompter-studio.git
+git clone https://github.com/Ventspew/teleprompter-studio.git
 cd teleprompter-studio
 npm install
 npm run dev
