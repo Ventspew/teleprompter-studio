@@ -1,8 +1,9 @@
-
 import { useEffect } from "react";
 
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
+  // Autocue overlay may be contentEditable; still allow transport shortcuts there.
+  if (target.closest("[data-autocue-keys='allow']")) return false;
   const tag = target.tagName;
   if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return true;
   if (target.isContentEditable) return true;
@@ -15,6 +16,7 @@ export type ShortcutHandlers = {
   onFaster: () => void;
   onRewind: () => void;
   onForward: () => void;
+  onResetTeleprompter: () => void;
   onToggleRecord: () => void;
   onToggleFocus: () => void;
   onExitFocus: () => void;
@@ -53,6 +55,11 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers, enabled = true)
       if (key === "ArrowRight") {
         event.preventDefault();
         handlers.onForward();
+        return;
+      }
+      if (key === "Home") {
+        event.preventDefault();
+        handlers.onResetTeleprompter();
         return;
       }
       if (key === "r" || key === "R") {

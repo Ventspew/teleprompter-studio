@@ -86,12 +86,33 @@ export function TeleprompterControls({
         Scrollsnelheid ({scrollSpeed} px/s)
         <input
           type="range"
-          min={8}
-          max={160}
-          value={scrollSpeed}
+          min={12}
+          max={140}
+          value={Math.min(140, Math.max(12, scrollSpeed))}
           onChange={(e) => onSpeedChange(Number(e.target.value))}
           className="studio-range"
         />
+        <div className="flex flex-wrap gap-2 pt-1">
+          {[
+            { label: "Langzaam", value: 24 },
+            { label: "Normaal", value: 42 },
+            { label: "Vlot", value: 68 },
+            { label: "Snel", value: 100 },
+          ].map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className={`rounded-full px-2.5 py-1 text-[11px] transition ${
+                scrollSpeed === preset.value
+                  ? "bg-teal-400/20 text-teal-200"
+                  : "bg-white/5 text-zinc-400 hover:text-zinc-200"
+              }`}
+              onClick={() => onSpeedChange(preset.value)}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
       </label>
 
       <label className="grid gap-1.5 text-xs text-zinc-400">

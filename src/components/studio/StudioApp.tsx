@@ -18,6 +18,7 @@ import { MicMeter } from "@/components/camera/MicMeter";
 import { RecordControls } from "@/components/camera/RecordControls";
 import { ScriptStats } from "@/components/script/ScriptStats";
 import { ScriptEditor } from "@/components/teleprompter/ScriptEditor";
+import { AutocueTransport } from "@/components/teleprompter/AutocueTransport";
 import { TeleprompterControls } from "@/components/teleprompter/TeleprompterControls";
 import { TeleprompterView } from "@/components/teleprompter/TeleprompterView";
 import { useBackgroundBlur } from "@/hooks/useBackgroundBlur";
@@ -159,14 +160,17 @@ export function StudioApp() {
       onToggleTeleprompter: () => teleprompter.toggle(),
       onSlower: () =>
         updateSettings({
-          scrollSpeed: Math.max(8, settings.scrollSpeed - 5),
+          scrollSpeed: Math.max(12, settings.scrollSpeed - 4),
         }),
       onFaster: () =>
         updateSettings({
-          scrollSpeed: Math.min(160, settings.scrollSpeed + 5),
+          scrollSpeed: Math.min(140, settings.scrollSpeed + 4),
         }),
-      onRewind: () => teleprompter.nudge(-(settings.fontSize * settings.lineHeight * 3)),
-      onForward: () => teleprompter.nudge(settings.fontSize * settings.lineHeight * 3),
+      onRewind: () =>
+        teleprompter.nudge(-(settings.fontSize * settings.lineHeight * 3)),
+      onForward: () =>
+        teleprompter.nudge(settings.fontSize * settings.lineHeight * 3),
+      onResetTeleprompter: () => teleprompter.reset(),
       onToggleRecord: () => {
         if (recorder.isActive) requestStopRecording();
         else requestStartRecording();
@@ -191,6 +195,18 @@ export function StudioApp() {
       updateSettings,
     ],
   );
+
+  const changeScrollSpeed = useCallback(
+    (delta: number) => {
+      updateSettings({
+        scrollSpeed: Math.max(12, Math.min(140, settings.scrollSpeed + delta)),
+      });
+    },
+    [settings.scrollSpeed, updateSettings],
+  );
+
+  const showAutocueTransport =
+    teleprompter.playing || teleprompter.progress > 0 || teleprompter.offset > 0;
 
   useKeyboardShortcuts(shortcutHandlers);
 
@@ -278,6 +294,7 @@ export function StudioApp() {
                 centered={settings.centered}
                 overlayOpacity={1}
                 mode="classic"
+                playing={teleprompter.playing}
                 onMetrics={teleprompter.setMetrics}
                 onScriptChange={setScript}
               />
@@ -329,6 +346,7 @@ export function StudioApp() {
                         centered={settings.centered}
                         overlayOpacity={settings.overlayOpacity}
                         mode={mode}
+                        playing={teleprompter.playing}
                         onMetrics={teleprompter.setMetrics}
                         onScriptChange={setScript}
                       />
@@ -374,6 +392,17 @@ export function StudioApp() {
               </div>
             </div>
           )}
+
+          <AutocueTransport
+            visible={showAutocueTransport}
+            playing={teleprompter.playing}
+            scrollSpeed={settings.scrollSpeed}
+            progress={teleprompter.progress}
+            onToggle={teleprompter.toggle}
+            onReset={teleprompter.reset}
+            onSlower={() => changeScrollSpeed(-4)}
+            onFaster={() => changeScrollSpeed(4)}
+          />
 
           {/* Onderbalk alleen als de camera aan staat — anders overlapt die de start-UI */}
           {media.active && !focus && (
@@ -482,7 +511,12 @@ export function StudioApp() {
               script={settings.script}
               wpm={settings.wpm}
               progress={teleprompter.progress}
+              scrollDistance={teleprompter.scrollDistance}
+              scrollSpeed={settings.scrollSpeed}
               onWpmChange={(wpm) => updateSettings({ wpm })}
+              onMatchScrollSpeed={(scrollSpeed) =>
+                updateSettings({ scrollSpeed })
+              }
             />
 
             <ScriptEditor value={settings.script} onChange={setScript} />

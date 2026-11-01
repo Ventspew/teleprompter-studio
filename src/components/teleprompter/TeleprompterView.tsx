@@ -16,6 +16,8 @@ type TeleprompterViewProps = {
   onMetrics: (contentHeight: number, viewportHeight: number) => void;
   onScriptChange?: (value: string) => void;
   editable?: boolean;
+  /** When true, text is not editable so shortcuts (space, etc.) keep working. */
+  playing?: boolean;
 };
 
 function escapeHtml(text: string): string {
@@ -40,6 +42,7 @@ export function TeleprompterView({
   onMetrics,
   onScriptChange,
   editable = true,
+  playing = false,
 }: TeleprompterViewProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -72,22 +75,27 @@ export function TeleprompterView({
   const textColor = whiteOnBlack ? "text-white" : "text-zinc-100";
   const bg = mode === "classic" ? "bg-black" : "bg-transparent";
 
-  // Leeslijn dicht bij de webcam (bovenin) in overlay/focus.
+  // Leesbalk dicht bij de webcam (bovenin) in overlay/focus.
   const readingLineTop =
-    mode === "classic" ? "top-[28%]" : mode === "focus" ? "top-[22%]" : "top-[24%]";
+    mode === "classic" ? "top-[28%]" : mode === "focus" ? "top-[20%]" : "top-[22%]";
 
   const padTop =
     mode === "classic" ? "pt-[28vh]" : mode === "focus" ? "pt-[18%]" : "pt-[20%]";
 
+  const bandHeight = Math.round(fontSize * lineHeight * 1.35);
+
+  const canEdit = editable && Boolean(onScriptChange) && !playing;
+
   return (
     <div
       ref={viewportRef}
+      data-autocue-keys="allow"
       className={`relative h-full w-full overflow-hidden ${bg}`}
       style={{
         opacity: isOverlayBand ? overlayOpacity : 1,
       }}
     >
-      <ReadingLine className={readingLineTop} />
+      <ReadingLine className={readingLineTop} bandHeight={bandHeight} />
 
       <div
         className={`absolute inset-x-0 ${padTop} will-change-transform ${
@@ -110,7 +118,7 @@ export function TeleprompterView({
               : undefined,
           }}
         >
-          {editable && onScriptChange ? (
+          {canEdit ? (
             <div
               ref={editableRef}
               contentEditable
@@ -121,7 +129,7 @@ export function TeleprompterView({
               }}
               onBlur={(e) => {
                 focusedRef.current = false;
-                onScriptChange(e.currentTarget.innerText);
+                onScriptChange?.(e.currentTarget.innerText);
               }}
             />
           ) : (

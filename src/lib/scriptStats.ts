@@ -1,12 +1,45 @@
 export function countWords(text: string): number {
   const trimmed = text.trim();
   if (!trimmed) return 0;
-  return trimmed.split(/\s+/).filter(Boolean).length;
+  // Count word-like tokens; keep Dutch contractions/apostrophes as one word.
+  return (trimmed.match(/[A-Za-zÀ-ÖØ-öø-ÿ0-9]+(?:['’][A-Za-zÀ-ÖØ-öø-ÿ0-9]+)*/g) || [])
+    .length;
 }
 
-export function estimateDurationSeconds(wordCount: number, wpm: number): number {
-  if (wordCount <= 0 || wpm <= 0) return 0;
-  return (wordCount / wpm) * 60;
+/**
+ * Estimated speaking time based on WPM, with short pauses for punctuation
+ * and paragraph breaks so the total feels closer to real delivery.
+ */
+export function estimateDurationSeconds(text: string, wpm: number): number {
+  const words = countWords(text);
+  if (words <= 0 || wpm <= 0) return 0;
+
+  const speechSeconds = (words / wpm) * 60;
+  const sentencePauses = (text.match(/[.!?…]+/g) || []).length * 0.4;
+  const commaPauses = (text.match(/[,:;]/g) || []).length * 0.15;
+  const paragraphPauses = (text.match(/\n\s*\n/g) || []).length * 0.6;
+
+  return speechSeconds + sentencePauses + commaPauses + paragraphPauses;
+}
+
+/** How long the autocue takes at the current pixel scroll speed. */
+export function estimateScrollDurationSeconds(
+  scrollDistancePx: number,
+  speedPxPerSec: number,
+): number {
+  if (scrollDistancePx <= 0 || speedPxPerSec <= 0) return 0;
+  return scrollDistancePx / speedPxPerSec;
+}
+
+/** Scroll speed that finishes the script in roughly the speaking estimate. */
+export function suggestedScrollSpeed(
+  scrollDistancePx: number,
+  durationSeconds: number,
+): number {
+  if (scrollDistancePx <= 0 || durationSeconds <= 0) return 90;
+  return Math.round(
+    Math.max(12, Math.min(140, scrollDistancePx / durationSeconds)),
+  );
 }
 
 export function formatDuration(totalSeconds: number): string {

@@ -39,7 +39,7 @@ Pas scrollsnelheid en tekstgrootte aan tot het prettig leest.`;
 
 export const DEFAULT_SETTINGS: TeleprompterSettings = {
   script: DEFAULT_SCRIPT,
-  scrollSpeed: 40,
+  scrollSpeed: 42,
   fontSize: 42,
   lineHeight: 1.55,
   textWidth: 720,
@@ -47,7 +47,7 @@ export const DEFAULT_SETTINGS: TeleprompterSettings = {
   mirrored: false,
   centered: true,
   overlayOpacity: 0.85,
-  wpm: 140,
+  wpm: 130,
   displayMode: "overlay",
   videoQuality: "1080p",
   countdownSeconds: 3,
@@ -58,4 +58,4 @@ export const DEFAULT_SETTINGS: TeleprompterSettings = {
   audioDeviceId: "",
 };
 
-export const STORAGE_KEY = "teleprompter-studio-settings-v2";
+export const STORAGE_KEY = "teleprompter-studio-settings-v4";

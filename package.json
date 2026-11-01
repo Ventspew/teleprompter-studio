@@ -1,6 +1,6 @@
 {
   "name": "teleprompter-studio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Lokale teleprompter- en webcam-recorder voor macOS — vlogs, tutorials, presentaties",
   "author": "Teleprompter Studio",
