@@ -1,6 +1,6 @@
 {
   "name": "teleprompter-studio",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Lokale teleprompter- en webcam-recorder voor macOS — vlogs, tutorials, presentaties",
   "author": "Teleprompter Studio",
@@ -13,8 +13,8 @@
   "scripts": {
     "dev": "concurrently -k \"vite\" \"wait-on http://127.0.0.1:5173 && electron .\"",
     "build:web": "vite build",
-    "build": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac",
-    "build:dmg": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg zip",
+    "build": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac -c.mac.identity=null",
+    "build:dmg": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dmg zip -c.mac.identity=null",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "start": "electron ."
@@ -63,7 +63,8 @@
           "arch": ["arm64"]
         }
       ],
-      "hardenedRuntime": true,
+      "identity": null,
+      "hardenedRuntime": false,
       "gatekeeperAssess": false,
       "artifactName": "${productName}-${version}-${arch}.${ext}",
       "extendInfo": {

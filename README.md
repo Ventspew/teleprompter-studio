@@ -34,7 +34,22 @@ Dit opent Teleprompter Studio als desktopvenster.
 
 Download de nieuwste **DMG** van de [Releases](https://github.com/Ventspew/teleprompter-studio/releases)-pagina, open het bestand en sleep **Teleprompter Studio** naar Programma’s.
 
-> De app is unsigned. Bij de eerste start: rechtsklik → **Open** als Gatekeeper een melding toont.
+### “App is beschadigd” / kan niet worden geopend
+
+Dat komt door macOS Gatekeeper (de app is nog niet door Apple genotariseerd), niet omdat het bestand kapot is.
+
+**Oplossing (aanbevolen):**
+
+1. Sleep de app naar **Programma’s**
+2. Open **Terminal** en plak:
+
+```bash
+xattr -cr "/Applications/Teleprompter Studio.app"
+```
+
+3. Open de app opnieuw
+
+Of download `Fix-macOS-melding.command` bij de release, dubbelklik die, en bevestig in Systeeminstellingen indien gevraagd.
 
 ## Zelf bouwen
 
